@@ -11,7 +11,7 @@ services:
         environment:
             - MYSQL_DATABASE=cms
             - MYSQL_USER=cms
-            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
+            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS_DB}
             - MYSQL_RANDOM_ROOT_PASSWORD=yes
         mem_limit: 1g
         #env_file: config.env
@@ -51,11 +51,11 @@ services:
               is_directory: true
         restart: always
         environment:
-            - SERVICE_URL_CMS-WEB
+            - SERVICE_URL_CMS_WEB
             - MYSQL_HOST=cms-db
             - MYSQL_DATABASE=cms
             - MYSQL_USER=cms
-            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
+            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS_DB}
             - XMR_HOST=cms-xmr
             - CMS_USE_MEMCACHED=true
             - MEMCACHED_HOST=cms-memcached
@@ -68,7 +68,7 @@ services:
             - CMS_SMTP_HOSTNAME=none
             - CMS_SMTP_FROM_LINE_OVERRIDE=YES
             - CMS_SMTP_FROM=none
-            - CMS_SERVER_NAME=${SERVICE_FQDN_CMS-WEB}
+            - CMS_SERVER_NAME=${SERVICE_FQDN_CMS_WEB}
         env_file: config.env
         #ports:
         #    - "80:80"
