@@ -4,39 +4,74 @@ services:
     cms-db:
         image: mysql:8.4
         volumes:
-            - "./shared/db:/var/lib/mysql:Z"
+            - type: bind
+              source: ./shared/db
+              target: /var/lib/mysql:Z"
+              is_directory: true
         environment:
             - MYSQL_DATABASE=cms
             - MYSQL_USER=cms
+            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
             - MYSQL_RANDOM_ROOT_PASSWORD=yes
         mem_limit: 1g
-        env_file: config.env
+        #env_file: config.env
         restart: always
     cms-xmr:
         image: ghcr.io/xibosignage/xibo-xmr:1.2
-        ports:
-            - "9505:9505"
+        #ports:
+        #    - "9505:9505"
         restart: always
         mem_limit: 256m
-        env_file: config.env
     cms-web:
         image: ghcr.io/xibosignage/xibo-cms:release-4.4.1
         volumes:
-            - "./shared/cms/custom:/var/www/cms/custom:Z"
-            - "./shared/backup:/var/www/backup:Z"
-            - "./shared/cms/web/theme/custom:/var/www/cms/web/theme/custom:Z"
-            - "./shared/cms/library:/var/www/cms/library:Z"
-            - "./shared/cms/web/userscripts:/var/www/cms/web/userscripts:Z"
-            - "./shared/cms/ca-certs:/var/www/cms/ca-certs:Z"
+            - type: bind
+              source: ./shared/cms/custom
+              target: /var/www/cms/custom:Z"
+              is_directory: true
+            - type: bind
+              source: ./shared/backup
+              target: /var/www/backup:Z"
+              is_directory: true
+            - type: bind
+              source: ./shared/cms/web/theme/custom
+              target: /var/www/cms/web/theme/custom:Z"
+              is_directory: true
+            - type: bind
+              source: ./shared/cms/library
+              target: /var/www/cms/library:Z"
+              is_directory: true
+            - type: bind
+              source: ./shared/cms/web/userscripts
+              target: /var/www/cms/web/userscripts:Z"
+              is_directory: true
+            - type: bind
+              source: ./shared/cms/ca-certs
+              target: /var/www/cms/ca-certs:Z"
+              is_directory: true
         restart: always
         environment:
+            - SERVICE_URL_CMS-WEB
             - MYSQL_HOST=cms-db
+            - MYSQL_DATABASE=cms
+            - MYSQL_USER=cms
+            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
             - XMR_HOST=cms-xmr
             - CMS_USE_MEMCACHED=true
             - MEMCACHED_HOST=cms-memcached
+            - CMS_SMTP_SERVER=smtp.gmail.com:587
+            - CMS_SMTP_USERNAME=none
+            - CMS_SMTP_PASSWORD=none
+            - CMS_SMTP_USE_TLS=YES
+            - CMS_SMTP_USE_STARTTLS=YES
+            - CMS_SMTP_REWRITE_DOMAIN=gmail.com
+            - CMS_SMTP_HOSTNAME=none
+            - CMS_SMTP_FROM_LINE_OVERRIDE=YES
+            - CMS_SMTP_FROM=none
+            - CMS_SERVER_NAME=${SERVICE_FQDN_CMS-WEB}
         env_file: config.env
-        ports:
-            - "80:80"
+        #ports:
+        #    - "80:80"
         mem_limit: 1g
     cms-memcached:
         image: memcached:alpine
