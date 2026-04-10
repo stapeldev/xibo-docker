@@ -66,6 +66,10 @@ services:
             - CMS_SMTP_FROM_LINE_OVERRIDE=${CMS_SMTP_FROM_LINE_OVERRIDE}
             - CMS_SMTP_FROM=${CMS_SMTP_FROM}
             - CMS_SERVER_NAME=${SERVICE_FQDN_CMS_WEB}
+        labels:
+          - traefik.enable=true
+          - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
+          - traefik.http.routers.<unique_router_name>.entryPoints=http
         mem_limit: 1g
     cms-memcached:
         image: memcached:alpine
