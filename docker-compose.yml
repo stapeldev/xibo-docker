@@ -12,7 +12,7 @@ services:
             - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
             - MYSQL_USER=${MYSQL_USER:-cms}
             - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
-            - MYSQL_RANDOM_ROOT_PASSWORD=${MYSQL_RANDOM_ROOT_PASSWOR:-yes}
+            - MYSQL_RANDOM_ROOT_PASSWORD=${MYSQL_RANDOM_ROOT_PASSWORD:-yes}
         mem_limit: 1g
         restart: always
     cms-xmr:
