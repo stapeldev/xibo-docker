@@ -48,7 +48,7 @@ services:
               is_directory: true
         restart: always
         environment:
-            - SERVICE_URL_CMS
+            - SERVICE_URL_CMS_WEB
             - MYSQL_HOST=${MYSQL_HOST:-cms-db}
             - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
             - MYSQL_USER=${MYSQL_USER:-cms}
@@ -65,7 +65,7 @@ services:
             - CMS_SMTP_HOSTNAME=${CMS_SMTP_HOSTNAME}
             - CMS_SMTP_FROM_LINE_OVERRIDE=${CMS_SMTP_FROM_LINE_OVERRIDE}
             - CMS_SMTP_FROM=${CMS_SMTP_FROM}
-            - CMS_SERVER_NAME=${SERVICE_FQDN_CMS}
+            - CMS_SERVER_NAME=${CMS_SERVER_NAME:-${SERVICE_FQDN_CMS_WEB}}
         labels:
           - traefik.enable=true
           - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
