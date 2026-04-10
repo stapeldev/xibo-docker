@@ -9,17 +9,14 @@ services:
               target: /var/lib/mysql:Z"
               is_directory: true
         environment:
-            - MYSQL_DATABASE=cms
-            - MYSQL_USER=cms
+            - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
+            - MYSQL_USER=${MYSQL_USER:-cms}
             - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS_DB}
-            - MYSQL_RANDOM_ROOT_PASSWORD=yes
+            - MYSQL_RANDOM_ROOT_PASSWORD=${MYSQL_RANDOM_ROOT_PASSWOR:-yes}
         mem_limit: 1g
-        #env_file: config.env
         restart: always
     cms-xmr:
         image: ghcr.io/xibosignage/xibo-xmr:1.2
-        #ports:
-        #    - "9505:9505"
         restart: always
         mem_limit: 256m
     cms-web:
@@ -53,8 +50,8 @@ services:
         environment:
             - SERVICE_URL_CMS_WEB
             - MYSQL_HOST=cms-db
-            - MYSQL_DATABASE=cms
-            - MYSQL_USER=cms
+            - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
+            - MYSQL_USER=${MYSQL_USE:-cms}
             - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS_DB}
             - XMR_HOST=cms-xmr
             - CMS_USE_MEMCACHED=true
@@ -69,9 +66,6 @@ services:
             - CMS_SMTP_FROM_LINE_OVERRIDE
             - CMS_SMTP_FROM
             - CMS_SERVER_NAME=${SERVICE_FQDN_CMS_WEB}
-        env_file: config.env
-        #ports:
-        #    - "80:80"
         mem_limit: 1g
     cms-memcached:
         image: memcached:alpine
