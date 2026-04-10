@@ -11,7 +11,7 @@ services:
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
             - MYSQL_USER=${MYSQL_USER:-cms}
-            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS_DB}
+            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
             - MYSQL_RANDOM_ROOT_PASSWORD=${MYSQL_RANDOM_ROOT_PASSWOR:-yes}
         mem_limit: 1g
         restart: always
@@ -51,20 +51,20 @@ services:
             - SERVICE_URL_CMS_WEB
             - MYSQL_HOST=cms-db
             - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
-            - MYSQL_USER=${MYSQL_USE:-cms}
-            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS_DB}
+            - MYSQL_USER=${MYSQL_USER:-cms}
+            - MYSQL_PASSWORD=${SERVICE_PASSWORD_CMS-DB}
             - XMR_HOST=cms-xmr
             - CMS_USE_MEMCACHED=true
             - MEMCACHED_HOST=cms-memcached
-            - CMS_SMTP_SERVER
-            - CMS_SMTP_USERNAME
-            - CMS_SMTP_PASSWORD
-            - CMS_SMTP_USE_TLS #Yes or no
-            - CMS_SMTP_USE_STARTTLS
-            - CMS_SMTP_REWRITE_DOMAIN
-            - CMS_SMTP_HOSTNAME
-            - CMS_SMTP_FROM_LINE_OVERRIDE
-            - CMS_SMTP_FROM
+            - CMS_SMTP_SERVER=${CMS_SMTP_SERVER}
+            - CMS_SMTP_USERNAME=${CMS_SMTP_USERNAME}
+            - CMS_SMTP_PASSWORD${CMS_SMTP_PASSWORD}
+            - CMS_SMTP_USE_TLS=${CMS_SMTP_USE_TLS:-yes}
+            - CMS_SMTP_USE_STARTTLS=${CMS_SMTP_USE_STARTTLS:-no}
+            - CMS_SMTP_REWRITE_DOMAIN=${CMS_SMTP_REWRITE_DOMAIN:-none}
+            - CMS_SMTP_HOSTNAME=${CMS_SMTP_HOSTNAME}
+            - CMS_SMTP_FROM_LINE_OVERRIDE${CMS_SMTP_FROM_LINE_OVERRIDE}
+            - CMS_SMTP_FROM=${CMS_SMTP_FROM}
             - CMS_SERVER_NAME=${SERVICE_FQDN_CMS_WEB}
         mem_limit: 1g
     cms-memcached:
