@@ -6,7 +6,7 @@ services:
         volumes:
             - type: bind
               source: ./shared/db
-             target: /var/lib/mysql
+              target: /var/lib/mysql:Z
               is_directory: true
         environment:
             - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
@@ -24,27 +24,27 @@ services:
         volumes:
             - type: bind
               source: ./shared/cms/custom
-              target: /var/www/cms/custom
+              target: /var/www/cms/custom:Z
               is_directory: true
             - type: bind
               source: ./shared/backup
-              target: /var/www/backup
+              target: /var/www/backup:Z
               is_directory: true
             - type: bind
               source: ./shared/cms/web/theme/custom
-              target: /var/www/cms/web/theme/custom
+              target: /var/www/cms/web/theme/custom:Z
               is_directory: true
             - type: bind
               source: ./shared/cms/library
-              target: /var/www/cms/library
+              target: /var/www/cms/library:Z
               is_directory: true
             - type: bind
               source: ./shared/cms/web/userscripts
-              target: /var/www/cms/web/userscripts
+              target: /var/www/cms/web/userscripts:Z
               is_directory: true
             - type: bind
               source: ./shared/cms/ca-certs
-              target: /var/www/cms/ca-certs
+              target: /var/www/cms/ca-certs:Z
               is_directory: true
         restart: always
         environment:
