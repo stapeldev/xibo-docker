@@ -4,15 +4,12 @@ services:
     cms-db:
         image: mysql:8.4
         volumes:
-            - type: bind
-              source: ./shared/db
-              target: /var/lib/mysql
-              is_directory: true
+          - db:/var/lib/mysql
         environment:
-            - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
-            - MYSQL_USER=${MYSQL_USER:-cms}
-            - MYSQL_PASSWORD=${SERVICE_PASSWORD_DATABASE}
-            - MYSQL_RANDOM_ROOT_PASSWORD=${MYSQL_RANDOM_ROOT_PASSWORD:-yes}
+          - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
+          - MYSQL_USER=${MYSQL_USER:-cms}
+          - MYSQL_PASSWORD=${SERVICE_PASSWORD_DATABASE}
+          - MYSQL_RANDOM_ROOT_PASSWORD=${MYSQL_RANDOM_ROOT_PASSWORD:-yes}
         mem_limit: 1g
         restart: always
     cms-xmr:
@@ -22,50 +19,32 @@ services:
     cms-web:
         image: ghcr.io/xibosignage/xibo-cms:release-4.4.1
         volumes:
-            - type: bind
-              source: ./shared/cms/custom
-              target: /var/www/cms/custom
-              is_directory: true
-            - type: bind
-              source: ./shared/backup
-              target: /var/www/backup
-              is_directory: true
-            - type: bind
-              source: ./shared/cms/web/theme/custom
-              target: /var/www/cms/web/theme/custom
-              is_directory: true
-            - type: bind
-              source: ./shared/cms/library
-              target: /var/www/cms/library
-              is_directory: true
-            - type: bind
-              source: ./shared/cms/web/userscripts
-              target: /var/www/cms/web/userscripts
-              is_directory: true
-            - type: bind
-              source: ./shared/cms/ca-certs
-              target: /var/www/cms/ca-certs
-              is_directory: true
+          - custom:/var/www/cms/custom
+          - backup:/var/www/backup
+          - customtheme:/var/www/cms/web/theme/custom
+          - library:/var/www/cms/library
+          - userscripts:/var/www/cms/web/userscripts
+          - certs:/var/www/cms/ca-certs
         restart: always
         environment:
-            - SERVICE_URL_CMS_WEB
-            - MYSQL_HOST=${MYSQL_HOST:-cms-db}
-            - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
-            - MYSQL_USER=${MYSQL_USER:-cms}
-            - MYSQL_PASSWORD=${SERVICE_PASSWORD_DATABASE}
-            - XMR_HOST=${XMR_HOST:-cms-xmr}
-            - CMS_USE_MEMCACHED=${CMS_USE_MEMCACHED:-true}
-            - MEMCACHED_HOST=${MEMCACHED_HOST:-cms-memcached}
-            - CMS_SMTP_SERVER=${CMS_SMTP_SERVER}
-            - CMS_SMTP_USERNAME=${CMS_SMTP_USERNAME}
-            - CMS_SMTP_PASSWORD=${CMS_SMTP_PASSWORD}
-            - CMS_SMTP_USE_TLS=${CMS_SMTP_USE_TLS:-yes}
-            - CMS_SMTP_USE_STARTTLS=${CMS_SMTP_USE_STARTTLS:-no}
-            - CMS_SMTP_REWRITE_DOMAIN=${CMS_SMTP_REWRITE_DOMAIN:-none}
-            - CMS_SMTP_HOSTNAME=${CMS_SMTP_HOSTNAME}
-            - CMS_SMTP_FROM_LINE_OVERRIDE=${CMS_SMTP_FROM_LINE_OVERRIDE}
-            - CMS_SMTP_FROM=${CMS_SMTP_FROM}
-            - CMS_SERVER_NAME=${CMS_SERVER_NAME:-${SERVICE_FQDN_CMS_WEB}}
+          - SERVICE_URL_CMS_WEB
+          - MYSQL_HOST=${MYSQL_HOST:-cms-db}
+          - MYSQL_DATABASE=${MYSQL_DATABASE:-cms}
+          - MYSQL_USER=${MYSQL_USER:-cms}
+          - MYSQL_PASSWORD=${SERVICE_PASSWORD_DATABASE}
+          - XMR_HOST=${XMR_HOST:-cms-xmr}
+          - CMS_USE_MEMCACHED=${CMS_USE_MEMCACHED:-true}
+          - MEMCACHED_HOST=${MEMCACHED_HOST:-cms-memcached}
+          - CMS_SMTP_SERVER=${CMS_SMTP_SERVER}
+          - CMS_SMTP_USERNAME=${CMS_SMTP_USERNAME}
+          - CMS_SMTP_PASSWORD=${CMS_SMTP_PASSWORD}
+          - CMS_SMTP_USE_TLS=${CMS_SMTP_USE_TLS:-yes}
+          - CMS_SMTP_USE_STARTTLS=${CMS_SMTP_USE_STARTTLS:-no}
+          - CMS_SMTP_REWRITE_DOMAIN=${CMS_SMTP_REWRITE_DOMAIN:-none}
+          - CMS_SMTP_HOSTNAME=${CMS_SMTP_HOSTNAME}
+          - CMS_SMTP_FROM_LINE_OVERRIDE=${CMS_SMTP_FROM_LINE_OVERRIDE}
+          - CMS_SMTP_FROM=${CMS_SMTP_FROM}
+          - CMS_SERVER_NAME=${SERVICE_FQDN_CMS_WEB}
         labels:
           - traefik.enable=true
           - "traefik.http.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
@@ -79,3 +58,12 @@ services:
     cms-quickchart:
       image: ianw/quickchart
       restart: always
+
+volumes:
+  db:
+  custom:
+  backup:
+  customtheme:
+  library:
+  userscripts:
+  certs:
